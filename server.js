@@ -1,18 +1,20 @@
+// 引入第三方套件
 const express = require('express');
-const app = express();
 const socketio = require('socket.io');
 
+// 建立 express server
+const app = express();
 app.use(express.static(__dirname + '/public'));
 
-const expressServer = app.listen(9000, () => {
-  console.log('Server listening on : 9000');
-});
-
-const io = socketio(expressServer);
+// 初始化 socket.io server
+const io = socketio(
+  // 設定 express server 監聽 9000 port
+  app.listen(9000, () => {
+    console.log('Server listening on : 9000');
+  })
+);
 
 io.on('connection', socket => {
-  socket.emit('welcome', { text: '歡迎來到 socket.io server!' });
-
   socket.on('message', msg => {
     console.log(msg);
     io.emit('messageFromServer', { text: msg.text, id: msg.id });
