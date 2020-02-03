@@ -16,7 +16,13 @@
 
   function sendTextToServer() {
     const textValue = $('.chat__text').val();
-    socket.emit('message', { text: textValue });
+    socket.emit('message', {
+      text: textValue,
+      id: socket.id
+    });
+
+    appendChatBox('my-chat', textValue);
+
     $('.chat__text').val('');
   }
 
@@ -30,8 +36,14 @@
     });
 
     socket.on('messageFromServer', msg => {
-      const chatMsg = '<li>' + msg.text + '</li>';
-      $('.chat__box').append(chatMsg);
+      if (msg.id !== socket.id) {
+        appendChatBox('others-chat', msg.text);
+      }
     });
+  }
+
+  function appendChatBox(cl, text) {
+    const chatMsg = '<li class="' + cl + '"><span>' + text + '</span></li>';
+    $('.chat__box').append(chatMsg);
   }
 })();
