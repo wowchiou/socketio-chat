@@ -4,6 +4,8 @@ const socketio = require('socket.io');
 
 // 建立 express server
 const app = express();
+
+// 設定 express server 可被訪問的路徑
 app.use(express.static(__dirname + '/public'));
 
 // 初始化 socket.io server
